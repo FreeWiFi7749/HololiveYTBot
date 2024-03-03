@@ -1,12 +1,16 @@
+import discord
 from discord.ext import tasks, commands
+from dotenv import load_dotenv
 import os
 import googleapiclient.discovery
+
+load_dotenv()
 
 class SubscriberNotifications(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
-        self.CHANNEL_ID = 'ここにYouTubeチャンネルIDを入力'  # 監視対象のYouTubeチャンネルID
+        self.CHANNEL_ID = 'UC-hM6YJuNYVAmUWxeIr9FeA'
         self.DISCORD_CHANNEL_ID = 1213703288193683526
         self.check_subscribers.start()
 
@@ -24,8 +28,7 @@ class SubscriberNotifications(commands.Cog):
         if response['items']:
             subscriber_count = int(response['items'][0]['statistics']['subscriberCount'])
             message = f'📈 現在の登録者数: {subscriber_count}人'
-            # 特定のマイルストーンで通知を送る
-            if subscriber_count % 10000 == 0:  # ここでは1000人ごとの登録者数で通知を送る例を示しています
+            if subscriber_count % 10000 == 0:
                 channel = self.bot.get_channel(self.DISCORD_CHANNEL_ID)
                 await channel.send(f'🎉 **登録者数が{subscriber_count}人に到達しました!** 🎉\n{message}')
 
@@ -33,5 +36,5 @@ class SubscriberNotifications(commands.Cog):
     async def before_check_subscribers(self):
         await self.bot.wait_until_ready()
 
-def setup(bot):
-    bot.add_cog(SubscriberNotifications(bot))
+async def setup(bot):
+    await bot.add_cog(SubscriberNotifications(bot))

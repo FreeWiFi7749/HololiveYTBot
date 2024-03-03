@@ -1,7 +1,10 @@
 import discord
 from discord.ext import commands
+from dotenv import load_dotenv
 import os
 import pathlib
+
+load_dotenv()
 
 TOKEN = os.getenv('BOT_TOKEN')
 command_prefix = ['h/']

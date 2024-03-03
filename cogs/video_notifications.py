@@ -1,23 +1,40 @@
 from discord.ext import tasks, commands
+import discord
+from dotenv import load_dotenv
 import os
 import googleapiclient.discovery
 from datetime import datetime, timedelta
 import pytz
+import json
+
+load_dotenv()
 
 class VideoNotifications(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
-        self.CHANNEL_ID = 'ここにYouTubeチャンネルIDを入力'  # 監視対象のYouTubeチャンネルID
         self.DISCORD_CHANNEL_ID = 1213703241867730945
-        self.last_check = datetime.now(pytz.UTC) - timedelta(days=1)  # 最後にチェックした日時（デフォルトは1日前）
+        self.last_check = self.load_last_check()
+        self.YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
+        self.CHANNEL_ID = 'UC-hM6YJuNYVAmUWxeIr9FeA'
         self.check_new_videos.start()
+
+    def load_last_check(self):
+        try:
+            with open("data/last_check.json", "r") as file:
+                data = json.load(file)
+                return datetime.fromisoformat(data["last_check"])
+        except (FileNotFoundError, json.JSONDecodeError):
+            return datetime.now(pytz.UTC) - timedelta(days=1)
+
+    def save_last_check(self):
+        os.makedirs("data", exist_ok=True)
+        with open("data/last_check.json", "w") as file:
+            json.dump({"last_check": self.last_check.isoformat()}, file)
 
     @tasks.loop(minutes=60)
     async def check_new_videos(self):
         youtube = googleapiclient.discovery.build('youtube', 'v3', developerKey=self.YOUTUBE_API_KEY)
         
-        # 最後にチェックした日時以降にアップロードされた動画を検索
         request = youtube.search().list(
             part="snippet",
             channelId=self.CHANNEL_ID,
@@ -37,8 +54,8 @@ class VideoNotifications(commands.Cog):
                 channel = self.bot.get_channel(self.DISCORD_CHANNEL_ID)
                 await channel.send(message)
             
-            # 最後にチェックした日時を更新
             self.last_check = datetime.now(pytz.UTC)
+            self.save_last_check()
 
     @check_new_videos.before_loop
     async def before_check_new_videos(self):
