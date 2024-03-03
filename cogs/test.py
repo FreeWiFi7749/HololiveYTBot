@@ -116,7 +116,7 @@ class TestErrorCog(commands.Cog):
             name="CommandInvokeError",
             value="コマンド実行中にエラーが発生したにぇ"
         )
-        await ctx.sned(Embed=e)
+        await ctx.send(Embed=e)
         await ctx.message.add_reaction("🌸")
 
 async def setup(bot):
