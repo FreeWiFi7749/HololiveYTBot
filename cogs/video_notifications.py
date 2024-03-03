@@ -3,10 +3,11 @@ import discord
 from dotenv import load_dotenv
 import os
 import googleapiclient.discovery
-from datetime import datetime, timedelta
+from googleapiclient.discovery import HttpError
+from datetime import datetime, timedelta, timezone
 import pytz
 import json
-
+import asyncio
 load_dotenv()
 
 class VideoNotifications(commands.Cog):
@@ -31,32 +32,44 @@ class VideoNotifications(commands.Cog):
         with open("data/last_check.json", "w") as file:
             json.dump({"last_check": self.last_check.isoformat()}, file)
 
+    async def send_quota_exceeded_message(self):
+        channel = self.bot.get_channel(self.DISCORD_CHANNEL_ID)
+        if channel:
+            await channel.send("⚠️ YouTube APIのクォータ制限に達しました。しばらくの間、動画投稿の通知は行われません。")
+
     @tasks.loop(minutes=60)
     async def check_new_videos(self):
-        youtube = googleapiclient.discovery.build('youtube', 'v3', developerKey=self.YOUTUBE_API_KEY)
+        try:
+            youtube = googleapiclient.discovery.build('youtube', 'v3', developerKey=self.YOUTUBE_API_KEY)
         
-        request = youtube.search().list(
-            part="snippet",
-            channelId=self.CHANNEL_ID,
-            type="video",
-            publishedAfter=self.last_check.isoformat(),
-            maxResults=5,
-            order="date"
-        )
-        response = request.execute()
+            request = youtube.search().list(
+                part="snippet",
+                channelId=self.CHANNEL_ID,
+                type="video",
+                publishedAfter=self.last_check.isoformat(),
+                maxResults=5,
+                order="date"
+            )
+            response = request.execute()
 
-        if response['items']:
-            for item in response['items']:
-                video_id = item['id']['videoId']
-                video_title = item['snippet']['title']
-                video_url = f'https://www.youtube.com/watch?v={video_id}'
-                message = f'🆕 **新しい動画が投稿されました** 🆕\nタイトル: {video_title}\nURL: {video_url}'
-                channel = self.bot.get_channel(self.DISCORD_CHANNEL_ID)
-                await channel.send(message)
+            if response['items']:
+                for item in response['items']:
+                    video_id = item['id']['videoId']
+                    video_title = item['snippet']['title']
+                    video_url = f'https://www.youtube.com/watch?v={video_id}'
+                    message = f'🆕 **新しい動画が投稿されました** 🆕\nタイトル: {video_title}\nURL: {video_url}'
+                    channel = self.bot.get_channel(self.DISCORD_CHANNEL_ID)
+                    await channel.send(message)
             
-            self.last_check = datetime.now(pytz.UTC)
-            self.save_last_check()
-
+                self.last_check = datetime.now(pytz.UTC)
+                self.save_last_check()
+                
+        except HttpError as e:
+            if e.resp.status in [403, 429]:
+                await self.send_quota_exceeded_message()
+                await asyncio.sleep(60 * 60)
+            else:
+                raise
     @check_new_videos.before_loop
     async def before_check_new_videos(self):
         await self.bot.wait_until_ready()
