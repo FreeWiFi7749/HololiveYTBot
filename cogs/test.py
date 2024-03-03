@@ -7,6 +7,7 @@ class TestErrorCog(commands.Cog):
 
     @commands.hybrid_command(name='test')
     async def test_error_command(self, ctx, error_type: str):
+        """test用のコマンドだにぇ"""
         if error_type == "CommandNotFound":
             await ctx.message.add_reaction('\u2705')
             raise commands.CommandNotFound("これはテスト用のコマンドが見つからないエラーです。")
@@ -60,6 +61,7 @@ class TestErrorCog(commands.Cog):
 
     @commands.hybrid_command(name='test_list')
     async def test_list(self, ctx):
+        """test用のコマンド一覧だにぇ"""
         e = discord.Embed(
             title="Testコマンドの一覧",
             color=0xFF8FDF
@@ -116,8 +118,7 @@ class TestErrorCog(commands.Cog):
             name="CommandInvokeError",
             value="コマンド実行中にエラーが発生したにぇ"
         )
-        await ctx.send(Embed=e)
-        await ctx.message.add_reaction("🌸")
+        await ctx.send(embed=e)
 
 async def setup(bot):
     await bot.add_cog(TestErrorCog(bot))
