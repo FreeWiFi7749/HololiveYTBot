@@ -30,7 +30,7 @@ class ErrorHandlingCog(commands.Cog):
             return None
 
         # スレッド名から既存のスレッドを検索
-        for thread in await main_channel.threads():
+        for thread in main_channel.threads:
             if thread.name == error_name:
                 return thread
 

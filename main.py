@@ -16,7 +16,6 @@ class MyBot(commands.Bot):
 
     async def on_ready(self):
         if not self.initialized:
-            # 起動中のアクティビティを設定
             await self.change_presence(activity=discord.Game(name="起動中.."))
             print('------')
             print(f'Bot Username: {self.user.name}')

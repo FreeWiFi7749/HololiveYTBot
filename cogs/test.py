@@ -10,7 +10,7 @@ class TestErrorCog(commands.Cog):
         if error_type == "CommandNotFound":
             raise commands.CommandNotFound("これはテスト用のコマンドが見つからないエラーです。")
         elif error_type == "MissingRequiredArgument":
-            raise commands.MissingRequiredArgument(param=None)  # 実際には適切なパラメータを指定する必要があります
+            raise commands.MissingRequiredArgument(param=None)
         elif error_type == "TooManyArguments":
             raise commands.TooManyArguments("引数が多すぎます。")
         elif error_type == "BadArgument":
