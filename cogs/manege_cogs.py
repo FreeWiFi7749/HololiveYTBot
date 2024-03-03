@@ -12,6 +12,7 @@ class ManagementCog(commands.Cog):
         """指定したCogを再読み込みします"""
         try:
             await self.bot.reload_extension(f"cogs.{cog}")
+            await self.bot.tree.sync()
             await ctx.reply(f"Reloaded cog: {cog}")
             return
         except Exception as e:
