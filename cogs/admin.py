@@ -1,9 +1,9 @@
 import discord
 from discord.ext import commands
-import textwrap
 import io
-import traceback
+import textwrap
 from contextlib import redirect_stdout
+import traceback
 
 class AdminCog(commands.Cog):
     def __init__(self, bot):
@@ -11,16 +11,17 @@ class AdminCog(commands.Cog):
         self._last_result = None
 
     def cleanup_code(self, content):
-        """コードブロックから不要な部分を取り除くユーティリティ関数"""
-        # コードブロックのマークダウンを削除
         if content.startswith('```') and content.endswith('```'):
             return '\n'.join(content.split('\n')[1:-1])
+        return content
 
-        return content.strip('` \n')
-
-    @commands.command(hidden=True, name='_eval')
+    @commands.hybrid_command(hidden=True, with_app_command=True, name='_eval')
+    @commands.is_owner()
     async def _eval(self, ctx, *, body: str):
-        """コードを評価する"""
+        """管理者用コマンド"""
+        if not ctx.interaction:
+            body = self.cleanup_code(body)
+        
         env = {
             'bot': self.bot,
             'ctx': ctx,
@@ -33,7 +34,6 @@ class AdminCog(commands.Cog):
 
         env.update(globals())
 
-        body = self.cleanup_code(body)
         stdout = io.StringIO()
 
         to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'

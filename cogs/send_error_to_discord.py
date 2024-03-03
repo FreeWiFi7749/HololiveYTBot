@@ -30,20 +30,27 @@ class ErrorHandlingCog(commands.Cog):
             return None
 
         # スレッド名から既存のスレッドを検索
-        for thread in main_channel.threads:
+        existing_thread = None
+        for thread in main_channel.threads:  # Corrected this line
             if thread.name == error_name:
-                return thread
+                existing_thread = thread
+                break
 
-        # 該当するスレッドがない場合、新しく作成
-        thread = await main_channel.create_thread(name=error_name, type=discord.ChannelType.public_thread)
-        self.error_threads[error_name] = thread.id
+        if existing_thread:
+            return existing_thread
+
+        # 新しいスレッドを作成
+        new_thread = await main_channel.create_thread(name=error_name, type=discord.ChannelType.public_thread)
+        self.error_threads[error_name] = new_thread.id
         self.save_error_threads()
-        return thread
 
     async def notify_error(self, error_type, message):
         thread = await self.get_or_create_thread(error_type)
         if thread:
-            await thread.send(message)
+            msg = "<@707320830387814531>"
+            full_message = f"{msg}\n{message}"
+            await thread.send(full_message)
+
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):

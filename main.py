@@ -13,6 +13,7 @@ class MyBot(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.initialized = False
+        self.cog_classes = {}
 
     async def on_ready(self):
         if not self.initialized:
@@ -21,9 +22,8 @@ class MyBot(commands.Bot):
             print(f'Bot Username: {self.user.name}')
             print(f'BotID: {self.user.id}')
             print('------')
-
             await self.load_cogs()
-
+            await bot.tree.sync()
             await self.change_presence(activity=discord.Game(name="にゃっはろ〜🌸"))
             self.initialized = True
             print('------')
