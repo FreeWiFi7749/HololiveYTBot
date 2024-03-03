@@ -36,5 +36,20 @@ class ManagementBot(commands.Cog):
                 
         await self.rstart_bot()
 
+    @commands.hybrid_command(name='help', with_app_command=True)
+    async def list_commands(self, ctx):
+        """利用可能なコマンドのリストを教えるにぇ"""
+        embed = discord.Embed(
+            title="コマンドリスト",
+            description="利用可能な全てのコマンド",
+            color=0xFF8FDF
+            )
+        
+        for command in self.bot.commands:
+            if not command.hidden:
+                embed.add_field(name=command.name, value=f"説明:\n{command.help}" or "説明:\nなし", inline=False)
+        
+        await ctx.send(embed=embed)
+        
 async def setup(bot):
     await bot.add_cog(ManagementBot(bot))
