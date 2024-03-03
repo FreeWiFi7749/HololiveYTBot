@@ -26,13 +26,14 @@ class ManagementBot(commands.Cog):
     @commands.hybrid_command(name='restart')
     @commands.is_owner()
     async def restart(self, ctx):
-        """Botを再起動します"""
-        msg = await ctx.send('10秒後にBotを再起動します...')
+        """Botを再起動するにぇ"""
+        msg = await ctx.send('10秒後にBotを再起動するにぇ...')
         for i in range(9, 0, -1):
             await asyncio.sleep(1)
-            await msg.edit(content=f"{i}秒後にBotを再起動します...")
+            await msg.edit(content=f"{i}秒後にBotを再起動するにぇ...")
             if i == 1:
-                await msg.edit(content=f"再起動を開始します。")
+                await msg.edit(content=f"再起動をするにぇ‼️")
+                
         await self.rstart_bot()
 
 async def setup(bot):

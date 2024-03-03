@@ -35,7 +35,7 @@ class VideoNotifications(commands.Cog):
     async def send_quota_exceeded_message(self):
         channel = self.bot.get_channel(self.DISCORD_CHANNEL_ID)
         if channel:
-            await channel.send("⚠️ YouTube APIのクォータ制限に達しました。しばらくの間、動画投稿の通知は行われません。")
+            await channel.send("⚠️ YouTube APIのクォータ制限に達したにぇ... しばらくの間、動画投稿の通知はできないにぇ😭")
 
     @tasks.loop(minutes=60)
     async def check_new_videos(self):

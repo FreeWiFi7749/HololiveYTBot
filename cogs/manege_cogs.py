@@ -9,7 +9,7 @@ class ManagementCog(commands.Cog):
     @commands.hybrid_command(name='reload', with_app_command=True, hidden=True)
     @commands.is_owner()
     async def reload_cog(self, ctx, *, cog: str):
-        """指定したCogを再読み込みします"""
+        """言われたCogを再読み込みするにぇ"""
         try:
             await self.bot.reload_extension(f"cogs.{cog}")
             await self.bot.tree.sync()
@@ -19,10 +19,10 @@ class ManagementCog(commands.Cog):
             await ctx.reply(f"Failed to reload cog: {cog}\n{type(e).__name__}: {e}")
             return
 
-    @commands.hybrid_command(name='list_cogs', with_app_command=True, description="ロードされているcogsのファイル名をリスト表示します。")
+    @commands.hybrid_command(name='list_cogs', with_app_command=True)
     @commands.is_owner()
     async def list_cogs(self, ctx):
-        """Embedを使用して現在ロードされているcogsのファイル名をリスト表示します。"""
+        """現在ロードされているcogsをリスト表示するにぇ"""
         embed = discord.Embed(title="ロードされているCogsのファイル名", color=discord.Color.blue())
         loaded_cogs = self.bot.cogs
         module_names = [cog_instance.__module__ for cog_instance in loaded_cogs.values()]

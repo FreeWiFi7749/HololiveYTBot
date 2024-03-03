@@ -55,39 +55,39 @@ class ErrorHandlingCog(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
-            await self.notify_error('command_not_found', f"```{error}```\n\nコマンドが見つかりません: {ctx.message.content}")
+            await self.notify_error('command_not_found', f"```{error}```\n\nコマンドが見つからないにぇ: {ctx.message.content}")
         elif isinstance(error, commands.MissingRequiredArgument):
-            await self.notify_error('missing_required_argument', f"```{error}```\n\n必要な引数が不足しています: {ctx.message.content}")
+            await self.notify_error('missing_required_argument', f"```{error}```\n\n必要な引数が不足してるにぇ: {ctx.message.content}")
         elif isinstance(error, commands.TooManyArguments):
-            await self.notify_error('too_many_arguments', f"```{error}```\n\n引数が多すぎます。")
+            await self.notify_error('too_many_arguments', f"```{error}```\n\n引数が多すぎるにぇ")
         elif isinstance(error, commands.BadArgument):
-            await self.notify_error('bad_argument', f"```{error}```\n\n無効な引数が提供されました。")
+            await self.notify_error('bad_argument', f"```{error}```\n\n無効な引数が提供されたにぇ")
         elif isinstance(error, commands.NoPrivateMessage):
-            await self.notify_error('no_private_message', f"```{error}```\n\nこのコマンドはプライベートメッセージでは使用できません。")
+            await self.notify_error('no_private_message', f"```{error}```\n\nこのコマンドはプライベートメッセージでは使えないにぇ")
         elif isinstance(error, commands.PrivateMessageOnly):
-            await self.notify_error('private_message_only', f"```{error}```\n\nこのコマンドはプライベートメッセージでのみ使用できます。")
+            await self.notify_error('private_message_only', f"```{error}```\n\nこのコマンドはプライベートメッセージでのみ使えるにぇ")
         elif isinstance(error, commands.NotOwner):
-            await self.notify_error('not_owner', f"```{error}```\n\nこのコマンドはBotのオーナーのみが使用できます。")
+            await self.notify_error('not_owner', f"```{error}```\n\nこのコマンドはBotのオーナーのみが使えるにぇ")
         elif isinstance(error, commands.MissingPermissions):
-            await self.notify_error('missing_permissions', f"```{error}```\n\n必要な権限がありません。")
+            await self.notify_error('missing_permissions', f"```{error}```\n\n必要な権限がないみたいだにぇ")
         elif isinstance(error, commands.BotMissingPermissions):
-            await self.notify_error('bot_missing_permissions', f"```{error}```\n\nBotに必要な権限がありません。")
+            await self.notify_error('bot_missing_permissions', f"```{error}```\n\nBotに必要な権限がないみたいだにぇ")
         elif isinstance(error, commands.CheckFailure):
-            await self.notify_error('check_failure', f"```{error}```\n\nコマンドの前提条件を満たしていません。")
+            await self.notify_error('check_failure', f"```{error}```\n\nコマンドの前提条件を満たしていないにぇ")
         elif isinstance(error, commands.CommandOnCooldown):
-            await self.notify_error('command_on_cooldown', f"```{error}```\n\nコマンドはクールダウン中です。再試行まで: {error.retry_after:.2f}秒。")
+            await self.notify_error('command_on_cooldown', f"```{error}```\n\nコマンドはクールダウン中だにぇ。再試行まで: {error.retry_after:.2f}秒。")
         elif isinstance(error, commands.DisabledCommand):
-            await self.notify_error('disabled_command', "```{error}```\n\nこのコマンドは現在無効になっています。")
+            await self.notify_error('disabled_command', "```{error}```\n\nこのコマンドは現在無効になっているにぇ")
         elif isinstance(error, commands.CommandInvokeError):
-            await self.notify_error('command_invoke_error', f"```{error}```\n\nコマンド実行中にエラーが発生しました: {error.original}")
+            await self.notify_error('command_invoke_error', f"```{error}```\n\nコマンド実行中にエラーが発生したにぇ: {error.original}")
         # その他のエラータイプに対する処理を追加...
         else:
-            await self.notify_error('unknown_error', f"```{error}```\n\n未知のエラーが発生しました。")
+            await self.notify_error('unknown_error', f"```{error}```\n\n未知のエラーが発生したにぇ")
 
     async def handle_api_error(self, error):
         if isinstance(error, HttpError):
             if error.resp.status in [403, 429]:
-                await self.notify_error('quota_exceeded', "YouTube APIのクォータ制限に達しました。")
+                await self.notify_error('quota_exceeded', "YouTube APIのクォータ制限に達したにぇ")
             else:
                 await self.notify_error('unknown_api_error', str(error))
 

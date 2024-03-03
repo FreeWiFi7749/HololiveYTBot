@@ -18,7 +18,7 @@ class AdminCog(commands.Cog):
     @commands.hybrid_command(hidden=True, with_app_command=True, name='_eval')
     @commands.is_owner()
     async def _eval(self, ctx, *, body: str):
-        """管理者用コマンド"""
+        """管理者用コマンドだにぇ"""
         if not ctx.interaction:
             body = self.cleanup_code(body)
         
@@ -67,7 +67,7 @@ class AdminCog(commands.Cog):
     @commands.hybrid_command(name='clear', with_app_command=True)
     @commands.has_permissions(manage_messages=True)
     async def purge(self, ctx, limit: int):
-        """指定された数のメッセージを削除するコマンドです。"""
+        """言われた数のメッセージを削除するにぇ"""
         if not ctx.interaction:
             deleted = await ctx.channel.purge(limit=limit)
             message = f'削除されたメッセージの数: `{len(deleted)}`'

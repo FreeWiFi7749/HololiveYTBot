@@ -20,7 +20,7 @@ class SubscriberNotifications(commands.Cog):
     async def send_quota_exceeded_message(self):
         channel = self.bot.get_channel(self.DISCORD_CHANNEL_ID)
         if channel:
-            await channel.send("⚠️ YouTube APIのクォータ制限に達しました。しばらくの間、登録者数の通知は行われません。")
+            await channel.send("⚠️ YouTube APIのクォータ制限に達したにぇ... しばらくの間、登録者数の通知はできないにぇ😭")
 
     @tasks.loop(hours=24)
     async def check_subscribers(self):

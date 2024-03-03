@@ -34,7 +34,7 @@ class LiveNotifications(commands.Cog):
     async def send_quota_exceeded_message(self):
         channel = self.bot.get_channel(self.DISCORD_CHANNEL_ID)
         if channel:
-            await channel.send("⚠️ YouTube APIのクォータ制限に達しました。しばらくの間、ライブ配信の通知は行われません。")
+            await channel.send("⚠️ YouTube APIのクォータ制限に達したにぇ... しばらくの間、ライブ配信の通知はできないにぇ😭")
 
     async def notify_discord(self, item, status):
         """Discordチャンネルに埋め込み通知を送信するヘルパー関数"""

@@ -5,7 +5,7 @@ class TestErrorCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name='test')
+    @commands.hybrid_command(name='test')
     async def test_error_command(self, ctx, error_type: str):
         if error_type == "CommandNotFound":
             await ctx.message.add_reaction('\u2705')
@@ -57,6 +57,67 @@ class TestErrorCog(commands.Cog):
 
         else:
             await ctx.respond(f"指定されたエラータイプ `{error_type}` はサポートされていません。", ephemeral=True)
+
+    @commands.hybrid_command(name='test_list')
+    async def test_list(self, ctx):
+        e = discord.Embed(
+            title="Testコマンドの一覧",
+            color=0xFF8FDF
+        )
+        e.add_field(
+            name="CommandNotFound",
+            value="コマンドが見つからないにぇ"
+        )
+        e.add_field(
+            name="MissingRequiredArgument",
+            value="必要な引数が不足してるにぇ"
+        )
+        e.add_field(
+            name="TooManyArguments",
+            value="引数が多すぎるにぇ"
+        )
+        e.add_field(
+            name="BadArgument",
+            value="無効な引数が提供されたにぇ"
+        )
+        e.add_field(
+            name="NoPrivateMessage",
+            value="このコマンドはプライベートメッセージでは使えないにぇ"
+        )
+        e.add_field(
+            name="PrivateMessageOnly",
+            value="このコマンドはプライベートメッセージでのみ使えるにぇ"
+        )
+        e.add_field(
+            name="NotOwner",
+            value="このコマンドはBotのオーナーのみが使えるにぇ"
+        )
+        e.add_field(
+            name="MissingPermissions",
+            value="必要な権限がないみたいだにぇ"
+        )
+        e.add_field(
+            name="BotMissingPermissions",
+            value="Botに必要な権限がないみたいだにぇ"
+        )
+        e.add_field(
+            name="CheckFailure",
+            value="コマンドの前提条件を満たしていません。"
+        )
+        e.add_field(
+            name="CommandOnCooldown",
+            value="コマンドはクールダウン中だにぇ。"
+        )
+        e.add_field(
+            name="DisabledCommand",
+            value="このコマンドは現在無効になっているにぇ"
+        )
+        e.add_field(
+            name="CommandInvokeError",
+            value="コマンド実行中にエラーが発生したにぇ"
+        )
+        await ctx.sned(Embed=e)
+        await ctx.message.add_reaction("🌸")
 
 async def setup(bot):
     await bot.add_cog(TestErrorCog(bot))
