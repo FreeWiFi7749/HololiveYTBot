@@ -36,7 +36,7 @@ class ManagementBot(commands.Cog):
                 
         await self.rstart_bot()
     
-    @commands.hybrid_command(name='shutdown')
+    @commands.hybrid_command(name='shutdown', with_app_command=True, hidden=True)
     @commands.is_owner()
     async def shutdown(self, ctx):
         """Botをシャットダウンするにぇ"""

@@ -6,17 +6,17 @@ class ManagementCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.hybrid_command(name='reload', with_app_command=True, hidden=True)
+    @commands.hybrid_command(name='reload',hidden=True)
     @commands.is_owner()
     async def reload_cog(self, ctx, *, cog: str):
         """言われたCogを再読み込みするにぇ"""
         try:
             await self.bot.reload_extension(f"cogs.{cog}")
             await self.bot.tree.sync()
-            await ctx.reply(f"Reloaded cog: {cog}")
+            await ctx.reply(f"{cog}を再読み込みしたにぇ！")
             return
         except Exception as e:
-            await ctx.reply(f"Failed to reload cog: {cog}\n{type(e).__name__}: {e}")
+            await ctx.reply(f"{cog}を再読み込みできなかったにぇ...\n{type(e).__name__}: {e}")
             return
 
     @commands.hybrid_command(name='list_cogs', with_app_command=True)
