@@ -35,6 +35,13 @@ class ManagementBot(commands.Cog):
                 await msg.edit(content=f"再起動をするにぇ‼️")
                 
         await self.rstart_bot()
+    
+    @commands.hybrid_command(name='shutdown')
+    @commands.is_owner()
+    async def shutdown(self, ctx):
+        """Botをシャットダウンするにぇ"""
+        await ctx.send('Botをシャットダウンするにぇ...')
+        await self.bot.close()
 
     @commands.hybrid_command(name='help', with_app_command=True)
     async def list_commands(self, ctx):
@@ -47,9 +54,9 @@ class ManagementBot(commands.Cog):
         
         for command in self.bot.commands:
             if not command.hidden:
-                embed.add_field(name=command.name, value=f"説明:\n{command.help}" or "説明:\nなし", inline=False)
+                embed.add_field(name=command.name, value=f"説明: {command.help}" or "説明: なし", inline=False)
         
         await ctx.send(embed=embed)
-        
+
 async def setup(bot):
     await bot.add_cog(ManagementBot(bot))

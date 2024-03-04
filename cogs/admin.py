@@ -4,6 +4,7 @@ import io
 import textwrap
 from contextlib import redirect_stdout
 import traceback
+from discord.ext.commands import Context
 
 class AdminCog(commands.Cog):
     def __init__(self, bot):
@@ -77,6 +78,16 @@ class AdminCog(commands.Cog):
             deleted = await ctx.channel.purge(limit=limit)
             message = f'削除されたメッセージの数: `{len(deleted)}`'
             await ctx.send(message, ephemeral=True)
+
+    @commands.hybrid_command(name="_sync", hidden=True, with_app_command=True)
+    @commands.is_owner()
+    async def sync(self, ctx: Context):
+        """コマンドを同期するにぇ"""
+        self.bot.tree.clear_commands(guild=ctx.guild)
+        self.bot.tree.copy_global_to(guild=ctx.guild)
+        synced = await self.bot.tree.sync(guild=ctx.guild)
+        print(synced)
+        await ctx.reply(f"Synced {len(synced)} commands", mention_author=False)
 
 async def setup(bot):
     await bot.add_cog(AdminCog(bot))
