@@ -23,7 +23,7 @@ class ManagementBot(commands.Cog):
             print(f"再起動中にエラーが発生しました: {e}")
 
 
-    @commands.hybrid_command(name='restart')
+    @commands.hybrid_command(name='restart', hidden=True)
     @commands.is_owner()
     async def restart(self, ctx):
         """Botを再起動するにぇ"""

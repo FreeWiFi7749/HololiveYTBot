@@ -27,7 +27,6 @@ class SubscriberNotifications(commands.Cog):
         try:
             youtube = googleapiclient.discovery.build('youtube', 'v3', developerKey=self.YOUTUBE_API_KEY)
         
-            # チャンネルの登録者数を取得
             request = youtube.channels().list(
                 part="statistics",
                 id=self.CHANNEL_ID

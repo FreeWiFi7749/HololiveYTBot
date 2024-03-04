@@ -23,15 +23,14 @@ class ErrorHandlingCog(commands.Cog):
         with path.open('w', encoding='utf-8') as f:
             json.dump(self.error_threads, f, ensure_ascii=False, indent=4)
 
-    async def get_or_create_thread(self, error_name):
+    async def get_or_create_thread(self, error_name, message):
         main_channel = self.bot.get_channel(self.main_channel_id)
         if not main_channel:
             print("メインチャンネルが見つかりません。")
             return None
 
-        # スレッド名から既存のスレッドを検索
         existing_thread = None
-        for thread in main_channel.threads:  # Corrected this line
+        for thread in main_channel.threads:
             if thread.name == error_name:
                 existing_thread = thread
                 break
@@ -39,10 +38,12 @@ class ErrorHandlingCog(commands.Cog):
         if existing_thread:
             return existing_thread
 
-        # 新しいスレッドを作成
         new_thread = await main_channel.create_thread(name=error_name, type=discord.ChannelType.public_thread)
         self.error_threads[error_name] = new_thread.id
         self.save_error_threads()
+        msg = "<@707320830387814531>"
+        full_message = f"{msg}\n{message}"
+        await new_thread.send(full_message)
 
     async def notify_error(self, error_type, message):
         thread = await self.get_or_create_thread(error_type)
@@ -80,7 +81,6 @@ class ErrorHandlingCog(commands.Cog):
             await self.notify_error('disabled_command', "```{error}```\n\nこのコマンドは現在無効になっているにぇ")
         elif isinstance(error, commands.CommandInvokeError):
             await self.notify_error('command_invoke_error', f"```{error}```\n\nコマンド実行中にエラーが発生したにぇ: {error.original}")
-        # その他のエラータイプに対する処理を追加...
         else:
             await self.notify_error('unknown_error', f"```{error}```\n\n未知のエラーが発生したにぇ")
 
