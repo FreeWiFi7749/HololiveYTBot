@@ -46,7 +46,7 @@ class ErrorHandlingCog(commands.Cog):
         await new_thread.send(full_message)
 
     async def notify_error(self, error_type, message):
-        thread = await self.get_or_create_thread(error_type)
+        thread = await self.get_or_create_thread(error_type, message)  # Add the 'message' argument
         if thread:
             msg = "<@707320830387814531>"
             full_message = f"{msg}\n{message}"
