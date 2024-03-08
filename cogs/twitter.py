@@ -125,8 +125,6 @@ class TwitterCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author.bot:
-            return
         with open('data/twitter_channels.json', 'r') as f:
             twitter_channels = json.load(f)["twitter_channels"]
     
@@ -138,13 +136,25 @@ class TwitterCog(commands.Cog):
                     if config["source_channel_id"] == source_channel_info["channel_id"]:
                         print("転送", config["source_channel_id"], config["target_channel_id"], message.content)
                         target_channel = self.bot.get_channel(int(config['target_channel_id']))
-                        if target_channel:
-                            role_mention = ""
-                            if "mention_role_id" in config:
-                                print("mention_role_id", config["mention_role_id"])
-                                role = message.guild.get_role(int(config['mention_role_id']))
-                                if role:
-                                    role_mention = role.mention
+                    if target_channel:
+                        role_mention = ""
+                        if "mention_role_id" in config:
+                            print("mention_role_id", config["mention_role_id"])
+                            role = message.guild.get_role(int(config['mention_role_id']))
+                            if role:
+                                role_mention = role.mention
+
+                        if message.webhook_id:
+                            webhook_name = message.author.name.replace("• TweetShift", "")
+                            webhook_icon_url = message.author.avatar_url
+                            webhook = await target_channel.create_webhook(name=webhook_name)
+                            try:
+                                await webhook.send(content=f"{role_mention}\n{message.content}",
+                                                   username=webhook_name, avatar_url=webhook_icon_url)
+                                print("転送完了")
+                            finally:
+                                await webhook.delete()
+                        else:
                             await target_channel.send(f"{role_mention} {message.content}")
                             print("転送完了")
 
