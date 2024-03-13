@@ -86,7 +86,7 @@ class QuizCog(commands.Cog):
         await ctx.send("クイズを追加したにぇ！")
 
     @quiz_group.command(name='start')
-    @commands.cooldown(1, 300, commands.BucketType.user)
+    @commands.cooldown(1, 5, commands.BucketType.user)
     async def start_quiz(self, ctx):
         """クイズを開始するにぇ"""
         if not self.quiz_data:

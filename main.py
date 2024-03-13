@@ -23,6 +23,7 @@ class MyBot(commands.Bot):
             print(f'BotID: {self.user.id}')
             print('------')
             await self.load_cogs()
+            await self.load_log_cogs()
             await bot.tree.sync()
             await self.change_presence(activity=discord.Game(name="にゃっはろ〜🌸"))
             self.initialized = True
@@ -43,6 +44,16 @@ class MyBot(commands.Bot):
             except commands.ExtensionFailed as e:
                 print(f'Failed to load extension {p.stem}: {e}')
 
+    async def load_log_cogs(self):
+        folder_name = 'cogs/log'
+        cur = pathlib.Path('.')
+        for p in cur.glob(f"{folder_name}/*.py"):
+            try:
+                cog_name = f'cogs.log.{p.stem}'
+                await self.load_extension(cog_name)
+                print(f'{cog_name} loaded successfully.')
+            except commands.ExtensionFailed as e:
+                print(f'Failed to load extension {p.stem}: {e}')
 
 intent: discord.Intents = discord.Intents.all()
 bot = MyBot(command_prefix=command_prefix, intents=intent, help_command=None)

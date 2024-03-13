@@ -146,7 +146,10 @@ class TwitterCog(commands.Cog):
 
                         if message.webhook_id:
                             webhook_name = message.author.name.replace("• TweetShift", "")
-                            webhook_icon_url = message.author.avatar_url
+                            if message.author.avatar:
+                                webhook_icon_url = message.author.avatar.url
+                            else:
+                                webhook_icon_url = message.author.default_avatar.url
                             webhook = await target_channel.create_webhook(name=webhook_name)
                             try:
                                 await webhook.send(content=f"{role_mention}\n{message.content}",
