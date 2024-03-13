@@ -1,0 +1,4 @@
+discord==1.7.3
+python-dotenv==0.19.1
+openai==0.27.0
+google-api-python-client==2.24.0
