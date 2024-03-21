@@ -87,7 +87,7 @@ class MessageDeletionCog(commands.Cog):
 
                     await thread.send(embed=embed)  # スレッドにメッセージを投稿
                     await thread.send("`消去された画像`")
-                    await thread.send(file=file)  # スレッドに画像を投稿
+                    await thread.send(file=file, spoiler=True)  # スレッドに画像を投稿
 
         else:
             embed.add_field(name="添付ファイル", value="なし", inline=False)
