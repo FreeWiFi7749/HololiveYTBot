@@ -58,5 +58,14 @@ class ManagementBot(commands.Cog):
         
         await ctx.send(embed=embed)
 
+    @commands.hybrid_command(name='ping', hidden=True)
+    async def ping(self, ctx):
+        """BotのPingを表示するにぇ"""
+        e = discord.Embed(title="Pong!", color=0xFF8FDF)
+        e.add_field(name="API Ping", value=f"{round(self.bot.latency * 1000)}ms", inline=False)
+        e.add_field(name="WebSocket Ping", value=f"{round(self.bot.ws.latency * 1000)}ms", inline=False)
+        e.add_field(name="Bot Ping", value=f"{round(self.bot.latency * 1000)}ms", inline=False)
+        await ctx.send(embed=e)
+
 async def setup(bot):
     await bot.add_cog(ManagementBot(bot))
