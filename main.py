@@ -24,6 +24,7 @@ class MyBot(commands.Bot):
             print('------')
             await self.load_cogs()
             await self.load_log_cogs()
+            await self.load_homepages_cogs()
             await bot.tree.sync()
             await self.change_presence(activity=discord.Game(name="にゃっはろ〜🌸"))
             self.initialized = True
@@ -50,6 +51,17 @@ class MyBot(commands.Bot):
         for p in cur.glob(f"{folder_name}/*.py"):
             try:
                 cog_name = f'cogs.log.{p.stem}'
+                await self.load_extension(cog_name)
+                print(f'{cog_name} loaded successfully.')
+            except commands.ExtensionFailed as e:
+                print(f'Failed to load extension {p.stem}: {e}')
+
+    async def load_homepages_cogs(self):
+        folder_name = 'cogs/homepages'
+        cur = pathlib.Path('.')
+        for p in cur.glob(f"{folder_name}/*.py"):
+            try:
+                cog_name = f'cogs.homepages.{p.stem}'
                 await self.load_extension(cog_name)
                 print(f'{cog_name} loaded successfully.')
             except commands.ExtensionFailed as e:

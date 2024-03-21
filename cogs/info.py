@@ -22,6 +22,7 @@ class ServerInfoCog(commands.Cog, name='Server Information'):
         number_of_categories = len(guild.categories)
         
         nsfw_level = str(guild.nsfw_level).replace('_', ' ').title()
+        nsfw_level = str(guild.nsfw_level).replace('Nsfwlevel.', ' ').title()
 
         description = (
             f'**Owner/ID:** {guild.owner} ({guild.owner_id})\n'
@@ -37,7 +38,7 @@ class ServerInfoCog(commands.Cog, name='Server Information'):
             f'**Channels:** \n📁 Categories: {number_of_categories}\n'
             f'💬 Text: {number_of_text_channels}\n🔊 Voice: {number_of_voice_channels}\n'
             f'🎤 Stage: {number_of_stage_channels}\n'
-            f'**AFK Channel/Timeout:** {guild.afk_channel}/{guild.afk_timeout // 60} min\n'
+            f'**AFK Channel/Timeout:** {guild.afk_channel}\n{guild.afk_timeout // 60} min\n'
             f'**Boost Level:** {guild.premium_tier} (Boosters: {guild.premium_subscription_count})\n'
         )
 
@@ -50,15 +51,13 @@ class ServerInfoCog(commands.Cog, name='Server Information'):
     async def user_info(self, ctx, *, user: discord.Member = None):
         """ユーザーの情報を表示するにぇ"""
         user = user or ctx.author
+        if user.premium_since is not None:
+            boosting_since = user.premium_since.strftime('%Y-%m-%d %H:%M:%S')
+        else:
+            boosting_since = 'Not boosting'
+        roles_description = "\n".join(role.mention for role in user.roles[1:])
 
-        description = (
-            f'**ID:** {user.id}\n'
-            f'**Created:** {user.created_at.strftime("%Y-%m-%d %H:%M:%S")}\n'
-            f'**Joined:** {user.joined_at.strftime("%Y-%m-%d %H:%M:%S")}\n'
-            f'**Roles:** {"\n".join(role.mention for role in user.roles[1:])}\n'
-            f'**Top Role:** {user.top_role.mention}\n'
-            f'**Boosting:** {user.premium_since}\n'
-        )
+        description = f"**ID:** {user.id}\n**Created:** {user.created_at.strftime('%Y-%m-%d %H:%M:%S')}\n**Joined:** {user.joined_at.strftime('%Y-%m-%d %H:%M:%S')}\n**Roles:** \n{roles_description}\n**Top Role:** {user.top_role.mention}\n**Boosting:** {boosting_since}\n"
 
         embed = discord.Embed(title=f'{user} User Information', description=description, color=discord.Color.blue())
         embed.set_thumbnail(url=str(user.avatar.url))
@@ -97,9 +96,16 @@ class ServerInfoCog(commands.Cog, name='Server Information'):
     @info_group.command(name='emoji_list')
     async def emoji_list(self, ctx):
         """絵文字のリストを表示するにぇ"""
-        emojis = "\n".join(str(emoji) for emoji in ctx.guild.emojis)
-        embed = discord.Embed(title="Emoji List", description=emojis, color=discord.Color.blue())
-        await ctx.send(embed=embed)
+        emojis_str = "\n".join(str(emoji) for emoji in ctx.guild.emojis)
+        chars_per_embed = 2000
+
+        # 絵文字リスト文字列を2000文字ごとに分割
+        emojis_chunks = [emojis_str[i:i+chars_per_embed] for i in range(0, len(emojis_str), chars_per_embed)]
+
+        for chunk in emojis_chunks:
+            # 各チャンクをEmbedのdescriptionに設定して送信
+            embed = discord.Embed(title="Emoji List", description=chunk, color=discord.Color.blue())
+            await ctx.send(embed=embed)
 
     @info_group.command(name='role')
     async def role_info(self, ctx, *, role: discord.Role):

@@ -78,7 +78,7 @@ class MessageDeletionCog(commands.Cog):
                     thread = None
 
                     for existing_thread in channel.threads:
-                        if existing_thread.id == 1128694821935141105:
+                        if existing_thread.id == 1217304433965400136:
                             thread = existing_thread
                             break
 
@@ -92,11 +92,11 @@ class MessageDeletionCog(commands.Cog):
         else:
             embed.add_field(name="添付ファイル", value="なし", inline=False)
 
-            channel = message.guild.get_channel(1128694609980174467)  # Replaced self.get_channel with message.guild.get_channel
+            channel = message.guild.get_channel(1217304059535687690)  # Replaced self.get_channel with message.guild.get_channel
             thread = None
 
             for existing_thread in channel.threads:
-                if existing_thread.id == 1128694821935141105:
+                if existing_thread.id == 1217304433965400136:
                     thread = existing_thread
                     break
 

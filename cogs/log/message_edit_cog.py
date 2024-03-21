@@ -32,10 +32,9 @@ class MessageEditCog(commands.Cog):
         embed.set_author(icon_url=message_before.author.avatar, name=message_before.author.display_name)
         embed.set_footer(text="メッセージID | " + str(message_before.id))
 
-        client = discord.Client()  # Replace with the appropriate client initialization
-
-        thread_id = 1128694821935141105
-        thread = await client.fetch_channel(thread_id)
+        # 修正した部分
+        thread_id = 1217304433965400136
+        thread = await self.bot.fetch_channel(thread_id)  # self.bot を使用してチャンネルをフェッチ
 
         if thread is None or not isinstance(thread, discord.Thread):
             return
