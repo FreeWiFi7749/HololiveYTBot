@@ -51,7 +51,7 @@ class ServerInfoCog(commands.Cog, name='Server Information'):
     async def user_info(self, ctx, *, user: discord.Member = None):
         """ユーザーの情報を表示するにぇ"""
         user = user or ctx.author
-        if user.
+
         if user.premium_since is not None:
             boosting_since = user.premium_since.strftime('%Y-%m-%d %H:%M:%S')
         else:
