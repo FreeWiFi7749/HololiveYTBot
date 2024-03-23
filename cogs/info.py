@@ -51,11 +51,12 @@ class ServerInfoCog(commands.Cog, name='Server Information'):
     async def user_info(self, ctx, *, user: discord.Member = None):
         """ユーザーの情報を表示するにぇ"""
         user = user or ctx.author
+        if user.
         if user.premium_since is not None:
             boosting_since = user.premium_since.strftime('%Y-%m-%d %H:%M:%S')
         else:
             boosting_since = 'Not boosting'
-        roles_description = "\n".join(role.mention for role in user.roles[1:])
+        roles_description = ", ".join(role.mention for role in user.roles[1:])
 
         description = f"**ID:** {user.id}\n**Created:** {user.created_at.strftime('%Y-%m-%d %H:%M:%S')}\n**Joined:** {user.joined_at.strftime('%Y-%m-%d %H:%M:%S')}\n**Roles:** \n{roles_description}\n**Top Role:** {user.top_role.mention}\n**Boosting:** {boosting_since}\n"
 

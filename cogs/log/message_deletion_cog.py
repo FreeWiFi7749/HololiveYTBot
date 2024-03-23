@@ -72,7 +72,7 @@ class MessageDeletionCog(commands.Cog):
                 with io.BytesIO() as output:
                     merged_image.save(output, format='PNG')
                     output.seek(0)
-                    file = discord.File(output, filename="merged_images.png")
+                    file = discord.File(output, filename="merged_images.png", spoiler=True)
 
                     channel = self.bot.get_channel(1217304059535687690)  # Replaced client with self.bot
                     thread = None
@@ -87,7 +87,7 @@ class MessageDeletionCog(commands.Cog):
 
                     await thread.send(embed=embed)  # スレッドにメッセージを投稿
                     await thread.send("`消去された画像`")
-                    await thread.send(file=file, spoiler=True)  # スレッドに画像を投稿
+                    await thread.send(file=file)  # スレッドに画像を投稿
 
         else:
             embed.add_field(name="添付ファイル", value="なし", inline=False)
